@@ -1,3 +1,6 @@
+import 'package:bringin_app/repository/sign_in_repo.dart';
+import 'package:bringin_app/screens/home/home_screen.dart';
+import 'package:bringin_app/screens/sign_in/sing_in_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -29,8 +32,24 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      
+    return FutureBuilder<String>(
+      future: SignInRepo.getToken(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.isNotEmpty) {
+            return const HomeScreen();
+          } else {
+            return const SignInScreen();
+          }
+        } else {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
-}
+  }
+
