@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:bringin_app/constants/api_constant.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInRepo {
   SignInRepo._();
@@ -29,15 +28,31 @@ class SignInRepo {
     }
   }
 
+     static Future<String> getToken(String phone, String otp) async {
+  final response = await http.post(
+    Uri.parse(getTokenUrl),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'phone': phone,
+      'OTP': otp,
+    }),
+  );
 
-
-  static Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', token);
+  if (response.statusCode == 200) {
+    final responseJson = jsonDecode(response.body);
+    if (responseJson['message'] == 'Success !') {
+      return responseJson['data']['token'];
+    } else {
+      throw Exception('Failed to get token');
+    }
+  } else {
+    throw Exception('Failed to get token');
   }
+}
 
-  static Future<String> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token') ?? '';
-  }
+
+
+
 }

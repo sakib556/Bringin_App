@@ -1,4 +1,4 @@
-import 'package:bringin_app/repository/sign_in_repo.dart';
+import 'package:bringin_app/repository/local_storage.dart';
 import 'package:bringin_app/screens/home/home_screen.dart';
 import 'package:bringin_app/screens/sign_in/sing_in_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +33,11 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
-      future: SignInRepo.getToken(),
+      future: LocalStorage.getToken(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.isNotEmpty) {
+            print("token is ${snapshot.data}");
             return const HomeScreen();
           } else {
             return const SignInScreen();

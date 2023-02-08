@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const OtpScreen(),
+                      builder: (context) =>  OtpScreen(mobileNumber: _phoneNumberController.text,),
                     ),
                   );
                 });
